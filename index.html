@@ -7,10 +7,10 @@
     <title>Canvas</title>
 
     <style type="text/css">
-        body {
-            background-color: floralwhite;
+        body { 
+            background-color: black;    /*  Set the background color on the screen */
         }
-        canvas {
+        canvas {    /*  Canvas properties such as border size/color etc.*/
             padding: 0;
             margin: auto;
             display: block;
@@ -20,8 +20,8 @@
             left: 0;
             right: 0;
 
-            background-color: dodgerblue;
-            border: 8px solid purple; 
+            background-color: purple;
+            border: 8px solid dodgerblue; 
         }
     </style>
 
@@ -29,30 +29,29 @@
 
   <body>
 
-    <canvas id="gameCanvas" width="350" height="250"></canvas>
+    <canvas id="gameCanvas" width="450" height="350"></canvas>  <!--    Gets a handle to the element with id gameCanvas. -->
 
     <script type="text/javascript">
-      // Gets a handle to the element with id gameCanvas.
-      var canvas = document.getElementById("gameCanvas");
+      var canvas = document.getElementById("gameCanvas");   // Gets a handle to the element with id gameCanvas.
         
-      // Get a 2D context for the canvas.
-      var ctx = canvas.getContext("2d");
+      
+      var ctx = canvas.getContext("2d");    // Get a 2D context for the canvas.
         
 
-        var userBall = {
-            x: canvas.width / 2
-            , y: canvas.height / 2
-            , r: 13
+        var userBall = {    //  Create a ball object names userball. This is the one the user will control
+            x: canvas.width / 2 //  Sets spawn position on the x axis in this case, half it's width
+            , y: canvas.height / 2 //  Sets spawn position on the y axis in this case, half it's height
+            , r: 13 //  Sets radius of the ball
         }  
 
         var enemyBall1 = {    //  Create object for enball1
-            position: {
-                  x: Math.floor((Math.random() * 345) + 5),
-                  y: Math.floor((Math.random() * 245) + 5)
+            position: { //  This is how we make it spawn randomly, rather than defined points
+                  x: Math.floor((Math.random() * 345) + 5), //  math.random  gives random position on x axis
+                  y: Math.floor((Math.random() * 245) + 5) //  math.random  gives random position on y axis
             } ,
             radius: 8 ,  //  Set radius of ball to 8
 
-            acceleration: {   //  Determines ball acceleration
+            acceleration: {   //  Determines ball acceleration / velocity
                 x: 5,
                 y: 3
             }
@@ -61,8 +60,8 @@
         
         var enemyBall2 = {    //  Create object for enball2
             position: {
-                  x: Math.floor((Math.random() * 345) + 5),
-                  y: Math.floor((Math.random() * 245) + 5)
+                  x: Math.floor((Math.random() * 345) + 5), //  math.random  gives random position on x axis
+                  y: Math.floor((Math.random() * 245) + 5) //  math.random  gives random position on y axis
             } ,
             radius: 8 ,  //  Set radius of ball to 8
 
@@ -71,117 +70,156 @@
                 y: 3
             }
 
-        } //  End ball2     
+        } //  End ball2 
+        
+        var enemyBall3 = {    //  Create object for enball3
+            position: {
+                  x: Math.floor((Math.random() * 345) + 5), //  math.random  gives random position on x axis
+                  y: Math.floor((Math.random() * 245) + 5) //  math.random  gives random position on y axis
+            } ,
+            radius: 8 ,  //  Set radius of ball to 8
+
+            acceleration: {   //  Determines ball acceleration
+                x: 5,
+                y: 3
+            }
+
+        } //  End ball3  
       
     
-        function drawCircle() {
+        function drawUserBall() {   //  Function to draw userball on the canvas
             ctx.fillStyle = "rgb(255, 255, 0)";   //  Color
-            ctx.beginPath();
-            ctx.arc(userBall.x, userBall.y, userBall.r, 0, 2 * Math.PI);
-            ctx.fill();
+            ctx.beginPath();    //  Begins path
+            ctx.arc(userBall.x, userBall.y, userBall.r, 0, 2 * Math.PI);    //  Calls ball with position on axis and its size (r)
+            ctx.fill(); //  Fills the color
             
-            ball1Collision();
+            //  functions to detect collision with each ball
+            ball1Collision();   
             ball2Collision();
+            ball3Collision();
         }
         
-         function drawEnemyBall1() {
+         function drawEnemyBall1() {   //  Function to draw enemy ball on the canvas
               ctx.fillStyle = "rgb(255, 25, 100)";   //  Color
               ctx.beginPath();  //  Begin path
-              ctx.arc(enemyBall1.position.x, enemyBall1.position.y, enemyBall1.radius, 0, 2 * Math.PI);   
+              ctx.arc(enemyBall1.position.x, enemyBall1.position.y, enemyBall1.radius, 0, 2 * Math.PI);//  Calls ball with position on axis and                                                                                                                 its size (r)
               ctx.fill();   //  Fills ball
 
-              enemyBall1.position.x += enemyBall1.acceleration.x;   //  Update y location
-              enemyBall1.position.y += enemyBall1.acceleration.y;
+              enemyBall1.position.x += enemyBall1.acceleration.x;   //  Update x location
+              enemyBall1.position.y += enemyBall1.acceleration.y;   //  Update y location
 
-              //    Keep animation going while ball1 hasn't hit the canvas
+              //    Keep animation going while enemyball hasn't hit the canvas, x axis
               if ((enemyBall1.position.x >= canvas.width - enemyBall1.radius) ||  (enemyBall1.position.x <= enemyBall1.radius))
                   enemyBall1.acceleration.x =- enemyBall1.acceleration.x;
-
+             
+             //    Keep animation going while enemyball hasn't hit the canvas, y axis
               if ((enemyBall1.position.y >= canvas.height - enemyBall1.radius) ||  (enemyBall1.position.y <= enemyBall1.radius))
                   enemyBall1.acceleration.y =- enemyBall1.acceleration.y;
 
-        } //  End function drawball
+        } //  End function
         
-        function drawEnemyBall2() {
+        function drawEnemyBall2() { //  no point commenting each function for all enemy balls, they're all the same as enemyball1
               ctx.fillStyle = "rgb(57, 255, 20)";   //  Color
               ctx.beginPath();  //  Begin path
               ctx.arc(enemyBall2.position.x, enemyBall2.position.y, enemyBall2.radius, 0, 2 * Math.PI);   
               ctx.fill();   //  Fills ball
 
-              enemyBall2.position.x += enemyBall2.acceleration.x;   //  Update y location
+              enemyBall2.position.x += enemyBall2.acceleration.x;
               enemyBall2.position.y += enemyBall2.acceleration.y;
 
-              //    Keep animation going while ball1 hasn't hit the canvas
               if ((enemyBall2.position.x >= canvas.width - enemyBall2.radius) ||  (enemyBall2.position.x <= enemyBall2.radius))
                   enemyBall2.acceleration.x =- enemyBall2.acceleration.x;
 
               if ((enemyBall2.position.y >= canvas.height - enemyBall2.radius) ||  (enemyBall2.position.y <= enemyBall2.radius))
                   enemyBall2.acceleration.y =- enemyBall2.acceleration.y;
 
-          } //  End function drawball
+          } //  End function 
         
-        function ball1Collision() {
-			    
-             
+        function drawEnemyBall3() {
+              ctx.fillStyle = "rgb(0, 0, 20)";   //  Color
+              ctx.beginPath();  //  Begin path
+              ctx.arc(enemyBall3.position.x, enemyBall3.position.y, enemyBall3.radius, 0, 2 * Math.PI);   
+              ctx.fill();   //  Fills ball
+
+              enemyBall3.position.x += enemyBall3.acceleration.x;
+              enemyBall3.position.y += enemyBall3.acceleration.y;
+
+              if ((enemyBall3.position.x >= canvas.width - enemyBall3.radius) ||  (enemyBall3.position.x <= enemyBall3.radius))
+                  enemyBall3.acceleration.x =- enemyBall3.acceleration.x;
+
+              if ((enemyBall3.position.y >= canvas.height - enemyBall3.radius) ||  (enemyBall3.position.y <= enemyBall3.radius))
+                  enemyBall3.acceleration.y =- enemyBall3.acceleration.y;
+
+          } //  End function 
+        
+        function ball1Collision() { //  function for collision detection and handling with userball
               var dx = (enemyBall1.position.x ) - (userBall.x );
               var dy = (enemyBall1.position.y ) - (userBall.y );
               var distance = Math.sqrt(dx * dx + dy * dy);
+            
               if (distance < enemyBall1.radius + userBall.r) {                 
-               
-                  gameOver();
-                  
+                  gameOver();   //  Calls gameover function to end game 
               } 		
-          }
+          } //  End function
              
-          function ball2Collision() {
-			    
+          function ball2Collision() {   //  Again, just the same as previous function, no point repeating all the comments    
               var dx = (enemyBall2.position.x ) - (userBall.x );
               var dy = (enemyBall2.position.y ) - (userBall.y );
               var distance = Math.sqrt(dx * dx + dy * dy);
-              if (distance < enemyBall2.radius + userBall.r) {                 
-               
-                  gameOver();
-                  
+              
+              if (distance < enemyBall2.radius + userBall.r) {                       
+                  gameOver();     
+              } 		
+          }
+        
+        function ball3Collision() {
+              var dx = (enemyBall3.position.x ) - (userBall.x );
+              var dy = (enemyBall3.position.y ) - (userBall.y );
+              var distance = Math.sqrt(dx * dx + dy * dy);
+            
+              if (distance < enemyBall3.radius + userBall.r) {                 
+                  gameOver();  
               } 		
           }
 
-        drawCircle(); //  call function
-        drawEnemyBall1();
-        drawEnemyBall2();
+        drawUserBall(); //  call function to draw userball on canvas
+        drawEnemyBall1(); //  call function to draw enemyball 1 on canvas
+        drawEnemyBall2();   //  etc.
+        drawEnemyBall3();
         
-        function repeatme() {
-
-            // clears  the screan/canvas i.e. where the ball was previously does not show up.
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            // calls the enemyBall function
+        function repeatme() {   //  A repeat function for every time the animation loops.
+            ctx.clearRect(0, 0, canvas.width, canvas.height);   // clears  the canvas
+            
+            //  Call enemy ball functions
             drawEnemyBall1();
             drawEnemyBall2();
+            drawEnemyBall3();
 
-            //calls the userBall function
-            drawCircle();
+            
+            drawUserBall(); //calls the userBall function
 
-            // gets the animation going
-            window.requestAnimationFrame(repeatme);  
-        }
+            
+            window.requestAnimationFrame(repeatme);  // gets the animation going
+        }   //  End function
         
-        function shutdown(){
+        function playAgain(){    //  play again function
             if (event.keyCode == 13 && userBall.y > userBall.r){    //  If they click enter, reload the game
                 location.reload(); 
             }
           }
         
-        function gameOver(){
-            ctx.clearRect(0, 0, canvas.width, canvas.height);    
-            ctx.fillStyle = "yellow";
-            ctx.font = "15px Verdana";
-            ctx.fillText("Game Over", 145, 125);
-            ctx.fillText("Press Enter To Restart", 145, 140);
+        function gameOver(){    //  End game, stop balls and all animation
+            ctx.clearRect(0, 0, canvas.width, canvas.height);  //   Clear canvas  
+            ctx.fillStyle = "yellow";   //  Show a message in yellow
+            ctx.font = "15px Verdana";  //  15 pixel size and Verdana style
+            ctx.fillText("Game Over", 145, 125);    //  The message itself and it's position on the canvas
+            ctx.fillText("Press Enter To Restart", 145, 140);   //  Second half of message, couldn't get it to fit otherwise
 
-            shutdown();
+            playAgain();    //  jumps to playAgain Method
           }
 
       // Add an event listener to the keypress event.
-    window.addEventListener("keydown", function(event) { 
+    window.addEventListener("keydown", function(event) { // function to take user input from the keyboard
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
         if (event.keyCode == 39 && userBall.x < canvas.width - userBall.r)
@@ -193,12 +231,15 @@
         else if (event.keyCode == 38 && userBall.y > userBall.r)
           userBall.y -= 10;
         
-        drawCircle(); //  call function
+        drawUserBall(); //  call function
+        
+        //  call enemyball functions
         drawEnemyBall1();
         drawEnemyBall2();
+        drawEnemyBall3();
     });
         
-    window.requestAnimationFrame(repeatme);
+    window.requestAnimationFrame(repeatme); //  Runs animation
     
       </script>
 
