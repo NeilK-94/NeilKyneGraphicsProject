@@ -165,16 +165,18 @@
         }
         
         function shutdown(){
-            if (event.keyCode == 13 && userBall.y > userBall.r){
+            if (event.keyCode == 13 && userBall.y > userBall.r){    //  If they click enter, reload the game
                 location.reload(); 
             }
           }
         
         function gameOver(){
             ctx.clearRect(0, 0, canvas.width, canvas.height);    
-            ctx.fillStyle = "red";
-            ctx.font = "30px Arial";
-            ctx.fillText("Game Over Press enter to restart", canvas.width / 2, canvas.height / 2);
+            ctx.fillStyle = "yellow";
+            ctx.font = "15px Verdana";
+            ctx.fillText("Game Over", 145, 125);
+            ctx.fillText("Press Enter To Restart", 145, 140);
+
             shutdown();
           }
 
