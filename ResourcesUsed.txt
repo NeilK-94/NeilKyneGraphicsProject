@@ -1,0 +1,10 @@
+Key codes for arrow keys: http://stackoverflow.com/questions/20863329/are-up-down-left-right-arrow-keycodes-always-the-same
+&
+Interaction-Master from lab resources
+
+Ball movement: Lab resources, mainly animation-master
+
+Collision: https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
+
+I got small bits of code from various websites that I can't remember the name of.
+Didn't take note of them when doing it! Stackoverflow was used a lot, as was jsFiddle!
