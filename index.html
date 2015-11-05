@@ -7,28 +7,30 @@
     <title>Canvas</title>
 
     <style type="text/css">
-      canvas {
-        padding: 0;
-        margin: auto;
-        display: block;
-        width: 500px;
-        height: 300px;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-          
-        background-color: black;
-        border: 5px solid lime; 
-      }
+        body {
+            background-color: black;
+        }
+        canvas {
+            padding: 0;
+            margin: auto;
+            display: block;
+
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+
+            background-color: darkblue;
+            border: 10px solid purple; 
+        }
     </style>
 
   </head>
 
   <body>
 
-    <canvas id="gameCanvas" width="500" height="300"></canvas>
+    <canvas id="gameCanvas" width="300" height="200"></canvas>
 
     <script type="text/javascript">
       // Gets a handle to the element with id gameCanvas.
@@ -37,37 +39,85 @@
       // Get a 2D context for the canvas.
       var ctx = canvas.getContext("2d");
         
-      // Make the fill style red.
-      ctx.fillStyle = "rgb(0, 255, 26)";
-      
-      var ball = {
+
+      var userBall = {
         x: canvas.width / 2
         , y: canvas.height / 2
         , r: 13
-      }
+      }  
       
-      function drawCircle() {
-        ctx.beginPath();
-        ctx.arc(ball.x, ball.y, ball.r, 0, 2 * Math.PI);
-        ctx.fill();
-      }
+      var enemyBall1 = {    //  Create object for enball1
+          x: canvas.width / 2.5,
+          y: canvas.height / 2.5,
+          radius: 8 ,  //  Set radius of ball to 12
+
+          acceleration: {   //  Determines ball acceleration
+              x: 5,
+              y: 3
+          }
+     
+    } //  End ball1
       
-      drawCircle(); //  call function
+
       
+        function drawCircle() {
+            ctx.fillStyle = "rgb(255, 255, 0)";   //  Color
+            ctx.beginPath();
+            ctx.arc(userBall.x, userBall.y, userBall.r, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+        
+         function drawEnemyBall1() {
+              ctx.fillStyle = "rgb(255, 25, 100)";   //  Color
+              ctx.beginPath();  //  Begin path
+              ctx.arc(enemyBall1.x, enemyBall1.y, enemyBall1.radius, 0, 2 * Math.PI);   
+              ctx.fill();   //  Fills ball
+
+              enemyBall1.x += enemyBall1.acceleration.x;   //  Update y location
+              enemyBall1.y += enemyBall1.acceleration.y;
+
+              //    Keep animation going while ball1 hasn't hit the canvas
+              if ((enemyBall1.x >= canvas.width - enemyBall1.radius) ||  (enemyBall1.x <= enemyBall1.radius))
+                  enemyBall1.acceleration.x =- enemyBall1.acceleration.x;
+
+              if ((enemyBall1.y >= canvas.height - enemyBall1.radius) ||  (enemyBall1.y <= enemyBall1.radius))
+                  enemyBall1.acceleration.y =- enemyBall1.acceleration.y;
+
+          } //  End function drawball
+
+        drawCircle(); //  call function
+        drawEnemyBall1();
+        
+        function repeatme() {
+
+              // clears  the screan/canvas i.e. where the ball was previously does not show up.
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+              // calls the function in the ball object
+              drawEnemyBall1();
+            
+              //calls the draw circle function
+              drawCircle();
+
+              // gets the animation going
+              window.requestAnimationFrame(repeatme);  
+          }
+
       // Add an event listener to the keypress event.
       window.addEventListener("keydown", function(event) { 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
-        if (event.keyCode == 39 && ball.x < canvas.width - ball.r)
-          ball.x += Math.min(5, canvas.width - ball.x - ball.r);
-        else if (event.keyCode == 37 && ball.x > ball.r)
-          ball.x -= 5;
-        else if (event.keyCode == 40 && ball.y < canvas.height - ball.r)
-          ball.y += 5;
-        else if (event.keyCode == 38 && ball.y > ball.r)
-          ball.y -= 5;
+        if (event.keyCode == 39 && userBall.x < canvas.width - userBall.r)
+          userBall.x += Math.min(10, canvas.width - userBall.x - userBall.r);
+        else if (event.keyCode == 37 && userBall.x > userBall.r)
+          userBall.x -= 10;
+        else if (event.keyCode == 40 && userBall.y < canvas.height - userBall.r)
+          userBall.y += 10;
+        else if (event.keyCode == 38 && userBall.y > userBall.r)
+          userBall.y -= 10;
         
         drawCircle(); //  call function
+        drawEnemyBall1();
+
       });
     </script>
 
